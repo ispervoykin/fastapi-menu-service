@@ -12,7 +12,7 @@
 
 ### 4. Установить зависимости
 
-С помощью команды pip install -r requirements.txt
+С помощью команды $ pip install -r requirements.txt
 
 ### 5. Создать базу данных
 
@@ -42,8 +42,8 @@ $ createdb -p 5000 -h eden -e demo
 
 ### 7. Мигрировать базу данных
 
-С помощью $ alembic upgrade head
+С помощью команды $ alembic upgrade head
 
 ### 8. Запустить сервер
 
-С помощью $ uvicorn main:app
+С помощью команды $ uvicorn main:app
