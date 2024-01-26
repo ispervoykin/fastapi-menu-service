@@ -3,7 +3,7 @@ from database import get_db
 from sqlalchemy.orm import Session
 from typing import List
 from models import Menu, Submenu, Dish
-import schemas
+import schemas as schemas
 
 router = APIRouter(
     prefix="/api/v1/menus",
