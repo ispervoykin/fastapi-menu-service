@@ -12,15 +12,13 @@
 
 ### 4. Установить зависимости
 
-С помощью команды pip install -r requirements.txt
+С помощью команды $ pip install -r requirements.txt
 
 ### 5. Создать базу данных
 
-В pgAdmin либо через коммандную строку:
+В pgAdmin либо через командную строку:
 
-$ createdb -p 5000 -h eden -e demo
-
-Здесь имя пользователя - eden, порт - 5000, название базы данных - demo.
+$ createdb menu_service
 
 ### 6. Создать файл .env в корне папки и заполнить его следующим форматом:
 
@@ -42,8 +40,8 @@ $ createdb -p 5000 -h eden -e demo
 
 ### 7. Мигрировать базу данных
 
-С помощью $ alembic upgrade head
+С помощью команды $ alembic upgrade head
 
 ### 8. Запустить сервер
 
-С помощью $ uvicorn main:app
+С помощью команды $ uvicorn main:app
