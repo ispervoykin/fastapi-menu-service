@@ -20,4 +20,5 @@ $ docker compose -f docker-compose-test.yaml -p test up -d
 
 Работает на порте 8001. Тесты запускаются командой\
 $ pytest
+
 Вывод количества подменю и блюд для Меню через один (сложный) ORM запрос находится в src/routers/menu.py на строках 21 и 49.
