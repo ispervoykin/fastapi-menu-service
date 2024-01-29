@@ -26,6 +26,9 @@ services:
             - 8001
         ports:
             - 8001:8000
+        depends_on:
+            - db
+        restart: always
 
 networks:
     ylab-test-network:

@@ -30,6 +30,7 @@ services:
             - 8000:8000
         depends_on:
             - db
+        restart: always
 
 networks:
     ylab-network:
