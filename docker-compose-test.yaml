@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+    db:
+        image: postgres:15.1-alpine
+        container_name: db_app_test
+        command: -p 1222
+        expose:
+            - 1222
+        ports:
+            - "1222:5432"
+        env_file:
+            - .env-test
+        networks:
+            - ylab-test-network
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile_test
+        env_file:
+            - .env-test
+        container_name: fastapi_app_test
+        command: ["/fastapi_app/docker/app.sh"]
+        networks:
+            - ylab-test-network
+        expose:
+            - 8001
+        ports:
+            - 8001:8000
+
+networks:
+    ylab-test-network:
+        name: ylab-test-network

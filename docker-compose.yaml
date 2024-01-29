@@ -8,18 +8,31 @@ services:
         command: -p 1221
         expose:
             - 1221
+        ports:
+            - "1221:5432"
         env_file:
             - .env-prod
+        networks:
+            - ylab-network
     app:
         build:
             context: .
+            dockerfile: Dockerfile
         env_file:
             - .env-prod
         container_name: fastapi_app
         command: ["/fastapi_app/docker/app.sh"]
+        volumes:
+            - /app/generated_files
+        networks:
+            - ylab-network
         ports:
-            - 9999:8000
+            - 8000:8000
         depends_on:
             - db
+
+networks:
+    ylab-network:
+        name: ylab-network
 volumes:
     pgdata:
