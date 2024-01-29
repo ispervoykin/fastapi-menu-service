@@ -1,8 +1,8 @@
 from fastapi import Depends, status, HTTPException, APIRouter
-from sqlalchemy import func
+from sqlalchemy import distinct, func
 from database import get_db
 from sqlalchemy.orm import Session
-from typing import List, Optional
+from typing import List
 from models import Menu, Submenu, Dish
 import schemas as schemas
 
@@ -18,8 +18,16 @@ def get_menus(db: Session = Depends(get_db)):
     db_menus = db.query(Menu).all() 
     for menu in db_menus:
         menu.id = str(menu.id)
-        menu.submenus_count = db.query(func.count(Submenu.id)).filter(Submenu.menu_id == menu.id).scalar()
-        menu.dishes_count = db.query(func.count(Dish.id)).join(Submenu).filter(Submenu.menu_id == menu.id).scalar()
+        query = db.query(
+                func.count(distinct(Submenu.id)).label("submenus_count"),
+                func.count(Dish.id).label("dishes_count")
+                )\
+                .outerjoin(Dish, Submenu.id == Dish.submenu_id)\
+                .filter(Submenu.menu_id == menu.id)\
+                .first()
+
+        menu.submenus_count = query.submenus_count
+        menu.dishes_count = query.dishes_count
 
     return db_menus
 
@@ -37,9 +45,17 @@ def get_menu(menu_id: int, db: Session = Depends(get_db)):
     db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
     if not db_menu:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="menu not found")
-    
-    db_menu.submenus_count = db.query(func.count(Submenu.id)).filter(Submenu.menu_id == db_menu.id).scalar()
-    db_menu.dishes_count = db.query(func.count(Dish.id)).join(Submenu).filter(Submenu.menu_id == db_menu.id).scalar()
+
+    query = db.query(
+            func.count(distinct(Submenu.id)).label("submenus_count"),
+            func.count(Dish.id).label("dishes_count")
+            )\
+            .outerjoin(Dish, Submenu.id == Dish.submenu_id)\
+            .filter(Submenu.menu_id == db_menu.id)\
+            .first()
+
+    db_menu.submenus_count = query.submenus_count
+    db_menu.dishes_count = query.dishes_count
 
     db_menu.id = str(db_menu.id)
     return db_menu

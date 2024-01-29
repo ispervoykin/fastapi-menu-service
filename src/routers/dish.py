@@ -17,7 +17,7 @@ def get_dishes(menu_id: int, submenu_id: int, db: Session = Depends(get_db)):
     if not db_menu:
         return []
     
-    db_submenu = db.query(Menu).filter(Submenu.id == submenu_id).first()
+    db_submenu = db.query(Menu).join(Submenu).filter(Submenu.id == submenu_id).first()
     if not db_submenu:
         return []
     
@@ -34,7 +34,7 @@ def create_dish(menu_id: int, submenu_id: int, dish: schemas.DishCreate, db: Ses
     if not db_menu:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="menu not found")
     
-    db_submenu = db.query(Menu).filter(Submenu.id == submenu_id).first()
+    db_submenu = db.query(Menu).join(Submenu).filter(Submenu.id == submenu_id).first()
     if not db_submenu:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="submenu not found")
 
@@ -52,7 +52,7 @@ def get_dish(menu_id: int, submenu_id: int, dish_id: int, db: Session = Depends(
     if not db_menu:
         return []
     
-    db_submenu = db.query(Menu).filter(Submenu.id == submenu_id).first()
+    db_submenu = db.query(Menu).join(Submenu).filter(Submenu.id == submenu_id).first()
     if not db_submenu:
         return []
 
