@@ -11,6 +11,16 @@ class Menu(Base):
 
     submenus = relationship('Submenu', backref='menu')
 
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
+    def stringify(self):
+        self = self.as_dict()
+        for keys in self:
+            self[keys] = str(self[keys])
+        return self
+        
+
 class Submenu(Base):
     __tablename__ = "submenu"
 
@@ -21,6 +31,15 @@ class Submenu(Base):
 
     dishes = relationship('Dish', backref='submenu')
 
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
+    def stringify(self):
+        self = self.as_dict()
+        for keys in self:
+            self[keys] = str(self[keys])
+        return self
+
 
 class Dish(Base):
     __tablename__ = "dish"
@@ -30,3 +49,12 @@ class Dish(Base):
     description = Column(String, nullable=False)
     price = Column(Numeric(precision=12, scale=2), nullable=False)
     submenu_id = Column(Integer, ForeignKey("submenu.id", ondelete="CASCADE"), nullable=False)
+
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
+    def stringify(self):
+        self = self.as_dict()
+        for keys in self:
+            self[keys] = str(self[keys])
+        return self

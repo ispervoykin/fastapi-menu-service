@@ -1,7 +1,7 @@
 from fastapi import Depends, status, APIRouter
 from database import get_db
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Union
 from layers.service import DishService
 import schemas as schemas
 
@@ -23,7 +23,7 @@ def create_dish(menu_id: int, submenu_id: int, dish: schemas.DishCreate, db: Ses
     return serv.create(menu_id, submenu_id, dish, db)
 
 
-@router.get("/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}", response_model=schemas.Dish)
+@router.get("/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}", response_model=Union[schemas.Dish, List[schemas.Dish]])
 def get_dish(menu_id: int, submenu_id: int, dish_id: int, db: Session = Depends(get_db)):
     serv = DishService()
     return serv.get_by_id(menu_id, submenu_id, dish_id, db)

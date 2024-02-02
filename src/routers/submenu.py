@@ -1,7 +1,7 @@
 from fastapi import Depends, status, APIRouter
 from database import get_db
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Union
 from layers.service import SubmenuService
 import schemas
 
@@ -21,7 +21,7 @@ def create_submenu(menu_id: int, submenu: schemas.SubmenuCreate, db: Session = D
     serv = SubmenuService()
     return serv.create(menu_id, submenu, db)
 
-@router.get("/{menu_id}/submenus/{submenu_id}", response_model=schemas.SubmenuCount)
+@router.get("/{menu_id}/submenus/{submenu_id}", response_model=Union[schemas.SubmenuCount, List[schemas.Submenu]])
 def get_submenu(menu_id: int, submenu_id: int,  db: Session = Depends(get_db)):
     serv = SubmenuService()
     return serv.get_by_id(menu_id, submenu_id, db)

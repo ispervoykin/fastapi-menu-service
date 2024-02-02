@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class MenuCreate(BaseModel):
     title: str
@@ -8,8 +8,8 @@ class Menu(MenuCreate):
     id: str
 
 class MenuCount(Menu):
-    submenus_count: int
-    dishes_count: int
+    submenus_count: int = Field(default=0)
+    dishes_count: int = Field(default=0)
 
 class SubmenuCreate(BaseModel):
     title: str
@@ -19,7 +19,7 @@ class Submenu(SubmenuCreate):
     id: str
 
 class SubmenuCount(Submenu):
-    dishes_count: int
+    dishes_count: int = Field(default=0)
 
 class DishCreate(BaseModel):
     title: str
