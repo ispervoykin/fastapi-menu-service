@@ -8,6 +8,8 @@ class Menu(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
+    submenus_count = Column(Integer, nullable=False, default=0)
+    dishes_count = Column(Integer, nullable=False, default=0)
 
     submenus = relationship('Submenu', backref='menu')
 
@@ -28,6 +30,7 @@ class Submenu(Base):
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
     menu_id = Column(Integer, ForeignKey("menu.id", ondelete="CASCADE"), nullable=False)
+    dishes_count = Column(Integer, nullable=False, default=0)
 
     dishes = relationship('Dish', backref='submenu')
 
