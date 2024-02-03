@@ -1,3 +1,6 @@
-import redis
+import redis  # type: ignore
 
-redis_db = redis.Redis(host="localhost", port=6379, decode_responses=True)
+from config import REDIS_HOST, REDIS_PORT
+
+print(REDIS_HOST, REDIS_PORT)
+redis_db = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)

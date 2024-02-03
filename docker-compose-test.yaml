@@ -30,6 +30,17 @@ services:
             - db
         restart: always
 
+    redis:
+        image: redis:latest
+        env_file:
+            - .env-test
+        container_name: redis_app_test
+        command: --port 5371
+        networks:
+            - ylab-test-network
+        expose:
+            - 5371
+
 networks:
     ylab-test-network:
         name: ylab-test-network
