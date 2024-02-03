@@ -1,4 +1,4 @@
-import redis  # type: ignore
+import redis
 
 from config import REDIS_HOST, REDIS_PORT
 
