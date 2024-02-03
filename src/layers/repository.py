@@ -17,6 +17,7 @@ def add_to_db(object: Menu, db: Session) -> None:
 
 class MenuRepository():
     def create(self, menu: schemas.MenuCreate, db: Session = Depends(get_db)) -> dict[str, str]:
+        """Создаёт меню в бд"""
         db_menu = Menu(title=menu.title, description=menu.description)
         add_to_db(db_menu, db)
 
@@ -25,6 +26,7 @@ class MenuRepository():
         return db_menu
 
     def get_all(self, db: Session = Depends(get_db)) -> list[Menu]:
+        """Получает все меню из бд"""
         db_menus = db.query(Menu).all()
         for i in range(len(db_menus)):
             query = db.query(
@@ -43,6 +45,7 @@ class MenuRepository():
         return db_menus
 
     def get_by_id(self, menu_id: int, db: Session = Depends(get_db)) -> dict[str, str]:
+        """Получает меню по id из бд"""
         db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
         if not db_menu:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail='menu not found')
@@ -63,6 +66,7 @@ class MenuRepository():
         return db_menu
 
     def update(self, menu_id: int, menu: schemas.MenuCreate, db: Session = Depends(get_db)) -> dict[str, str]:
+        """Изменяет меню по id в бд"""
         db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
         if not db_menu:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail='menu not found')
@@ -78,6 +82,7 @@ class MenuRepository():
         return db_menu
 
     def delete(self, menu_id: int, db: Session = Depends(get_db)) -> None:
+        """Удаляет меню по id из бд"""
         db_menu_query = db.query(Menu).filter(Menu.id == menu_id)
         if not db_menu_query.first():
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail='menu not found')
@@ -89,6 +94,7 @@ class MenuRepository():
 
 class SubmenuRepository:
     def create(self, menu_id: int, submenu: schemas.SubmenuCreate, db: Session = Depends(get_db)) -> dict[str, str]:
+        """Создаёт подменю в бд"""
         db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
         if not db_menu:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail='menu not found')
@@ -101,6 +107,7 @@ class SubmenuRepository:
         return db_submenu
 
     def get_all(self, menu_id: int, db: Session = Depends(get_db)) -> list[Submenu]:
+        """Получает все подменю из бд"""
         db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
         if not db_menu:
             return []
@@ -112,6 +119,7 @@ class SubmenuRepository:
         return db_submenus
 
     def get_by_id(self, menu_id: int, submenu_id: int, db: Session = Depends(get_db)) -> dict[str, str] | list[Any]:
+        """Получает подменю по id из бд"""
         db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
         if not db_menu:
             return []
@@ -126,6 +134,7 @@ class SubmenuRepository:
         return db_submenu
 
     def update(self, menu_id: int, submenu_id: int, submenu: schemas.SubmenuCreate, db: Session = Depends(get_db)) -> dict[str, str]:
+        """Изменяет подменю по id в бд"""
         db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
         if not db_menu:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail='menu not found')
@@ -144,6 +153,7 @@ class SubmenuRepository:
         return db_submenu
 
     def delete(self, menu_id: int, submenu_id: int, db: Session = Depends(get_db)) -> None:
+        """Удаляет подменю по id из бд"""
         db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
         if not db_menu:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail='menu not found')
@@ -159,6 +169,7 @@ class SubmenuRepository:
 
 class DishRepository:
     def create(self, menu_id: int, submenu_id: int, dish: schemas.DishCreate, db: Session = Depends(get_db)) -> dict[str, str]:
+        """Создаёт блюдо в бд"""
         db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
         if not db_menu:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail='menu not found')
@@ -174,6 +185,7 @@ class DishRepository:
         return db_dish
 
     def get_all(self, menu_id: int, submenu_id: int, db: Session = Depends(get_db)) -> list[Dish]:
+        """Получает все блюда из бд"""
         db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
         if not db_menu:
             return []
@@ -189,6 +201,7 @@ class DishRepository:
         return db_dishes
 
     def get_by_id(self, menu_id: int, submenu_id: int, dish_id: int, db: Session = Depends(get_db)) -> dict[str, str] | list[Any]:
+        """Получает блюдо по id из бд"""
         db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
         if not db_menu:
             return []
@@ -206,6 +219,7 @@ class DishRepository:
         return db_dish
 
     def update(self, menu_id: int, submenu_id: int, dish_id: int, dish: schemas.DishCreate, db: Session = Depends(get_db)) -> dict[str, str]:
+        """Изменяет блюдо по id в бд"""
         db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
         if not db_menu:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail='menu not found')
@@ -229,6 +243,7 @@ class DishRepository:
         return db_dish
 
     def delete(self, menu_id: int, submenu_id: int, dish_id: int, db: Session = Depends(get_db)) -> None:
+        """Удаляет блюдо по id из бд"""
         db_menu = db.query(Menu).filter(Menu.id == menu_id).first()
         if not db_menu:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail='menu not found')
