@@ -6,7 +6,20 @@ from sqlalchemy.orm import relationship
 from database import Base
 
 
-class Menu(Base):
+class UtilsClass(Base):
+    __abstract__ = True
+
+    def as_dict(self) -> dict[str, Any]:
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    def stringify(self) -> dict[str, str]:
+        dict = self.as_dict()
+        for keys in dict:
+            dict[keys] = str(dict[keys])
+        return dict
+
+
+class Menu(UtilsClass):
     __tablename__ = 'menu'
 
     id = Column(Integer, primary_key=True)
@@ -17,17 +30,8 @@ class Menu(Base):
 
     submenus = relationship('Submenu', backref='menu')
 
-    def as_dict(self) -> dict[str, Any]:
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-    def stringify(self) -> dict[str, str]:
-        dict = self.as_dict()
-        for keys in dict:
-            dict[keys] = str(dict[keys])
-        return dict
-
-
-class Submenu(Base):
+class Submenu(UtilsClass):
     __tablename__ = 'submenu'
 
     id = Column(Integer, primary_key=True)
@@ -38,17 +42,8 @@ class Submenu(Base):
 
     dishes = relationship('Dish', backref='submenu')
 
-    def as_dict(self) -> dict[str, Any]:
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-    def stringify(self) -> dict[str, str]:
-        dict = self.as_dict()
-        for keys in dict:
-            dict[keys] = str(dict[keys])
-        return dict
-
-
-class Dish(Base):
+class Dish(UtilsClass):
     __tablename__ = 'dish'
 
     id = Column(Integer, primary_key=True)
@@ -56,12 +51,3 @@ class Dish(Base):
     description = Column(String, nullable=False)
     price = Column(Numeric(precision=12, scale=2), nullable=False)
     submenu_id = Column(Integer, ForeignKey('submenu.id', ondelete='CASCADE'), nullable=False)
-
-    def as_dict(self) -> dict[str, Any]:
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
-    def stringify(self) -> dict[str, str]:
-        dict = self.as_dict()
-        for keys in dict:
-            dict[keys] = str(dict[keys])
-        return dict
