@@ -7,7 +7,7 @@ submenu_id = 1
 dish_id = 1
 
 
-def test_create_menu1() -> None:
+def test_create_menu() -> None:
     global menu_id
     post_json = {
         'title': 'My menu 1',
@@ -21,7 +21,7 @@ def test_create_menu1() -> None:
     menu_id = response_json['id']
 
 
-def test_create_submenu1() -> None:
+def test_create_submenu() -> None:
     global submenu_id
     post_json = {
         'title': 'My submenu 1',
@@ -35,7 +35,7 @@ def test_create_submenu1() -> None:
     submenu_id = response_json['id']
 
 
-def test_create_dish1() -> None:
+def test_create_first_dish() -> None:
     global dish_id
     post_json = {
         'title': 'My dish 1',
@@ -50,7 +50,7 @@ def test_create_dish1() -> None:
     dish_id = response_json['id']
 
 
-def test_create_dish2() -> None:
+def test_create_second_dish() -> None:
     global dish_id
     post_json = {
         'title': 'My dish 2',
@@ -65,7 +65,7 @@ def test_create_dish2() -> None:
     dish_id = response_json['id']
 
 
-def test_get_menu1() -> None:
+def test_get_menu_success() -> None:
     response = client.get(reverse('menu', {'menu_id': menu_id}))
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
@@ -75,7 +75,7 @@ def test_get_menu1() -> None:
     assert 'dishes_count' in response_json
 
 
-def test_get_submenu1() -> None:
+def test_get_submenu_success() -> None:
     response = client.get(reverse('submenu', {'menu_id': menu_id, 'submenu_id': submenu_id}))
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
@@ -84,27 +84,27 @@ def test_get_submenu1() -> None:
     assert 'dishes_count' in response_json
 
 
-def test_delete_submenu1() -> None:
+def test_delete_submenu() -> None:
     response = client.delete(reverse('submenu', {'menu_id': menu_id, 'submenu_id': submenu_id}))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.json() is None
 
 
-def test_get_submenus1() -> None:
+def test_get_submenus_empty() -> None:
     response = client.get(reverse('submenus', {'menu_id': menu_id}))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
     assert response.json() == []
 
 
-def test_get_dishes1() -> None:
+def test_get_dishes_empty() -> None:
     response = client.get(reverse('dishes', {'menu_id': menu_id, 'submenu_id': submenu_id}))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
     assert response.json() == []
 
 
-def test_get_menu2() -> None:
+def test_get_menu_success2() -> None:
     response = client.get(reverse('menu', {'menu_id': menu_id}))
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
@@ -114,13 +114,13 @@ def test_get_menu2() -> None:
     assert 'dishes_count' in response_json
 
 
-def test_delete_menu1() -> None:
+def test_delete_menu() -> None:
     response = client.delete(reverse('menu', {'menu_id': menu_id}))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.json() is None
 
 
-def test_get_menus1() -> None:
+def test_get_menus_empty() -> None:
     response = client.get(reverse('menus'))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
