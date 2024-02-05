@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 import schemas
 from database import get_db
-from layers.service import MenuService
+from layers.service_layer import MenuService
 
 router = APIRouter(
     prefix='/api/v1/menus',

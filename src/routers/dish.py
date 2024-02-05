@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 import schemas as schemas
 from database import get_db
-from layers.service import DishService
+from layers.service_layer import DishService
 
 router = APIRouter(
     prefix='/api/v1/menus',

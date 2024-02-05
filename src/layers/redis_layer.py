@@ -7,6 +7,7 @@ class MenuRedis:
             redis_db.hset(f'menu{object["id"]}', mapping=object)
         else:
             redis_db.hset(f'menu{menu_id}', mapping=object)
+        return None
 
     def get(self, menu_id: int) -> dict[str, str] | None:
         cache = redis_db.hgetall(f'menu{menu_id}')
@@ -16,10 +17,12 @@ class MenuRedis:
 
     def delete(self, menu_id: int) -> None:
         redis_db.delete(f'menu{menu_id}')
+        return None
 
     def delete_children(self, menu_id: int) -> None:
         for key in redis_db.scan_iter(f'menu{menu_id}*'):
             redis_db.delete(key)
+        return None
 
 
 class SubmenuRedis:
@@ -30,6 +33,7 @@ class SubmenuRedis:
                 redis_db.hincrby(f'menu{menu_id}', 'submenus_count')
         else:
             redis_db.hset(f'menu{menu_id}submenu{submenu_id}', mapping=object)
+        return None
 
     def get(self, menu_id: int, submenu_id: int) -> dict[str, str] | None:
         cache = redis_db.hgetall(f'menu{menu_id}submenu{submenu_id}')
@@ -39,11 +43,13 @@ class SubmenuRedis:
 
     def delete(self, menu_id: int, submenu_id: int) -> None:
         redis_db.delete(f'menu{menu_id}submenu{submenu_id}')
+        return None
 
     def delete_children(self, menu_id: int, submenu_id: int) -> None:
         for key in redis_db.scan_iter(f'menu{menu_id}submenu{submenu_id}*'):
             redis_db.delete(key)
         redis_db.delete(f'menu{menu_id}')
+        return None
 
 
 class DishRedis:
@@ -56,6 +62,7 @@ class DishRedis:
                 redis_db.hincrby(f'menu{menu_id}submenu{submenu_id}', 'dishes_count')
         else:
             redis_db.hset(f'menu{menu_id}submenu{submenu_id}dish{dish_id}', mapping=object)
+        return None
 
     def get(self, menu_id: int, submenu_id: int, dish_id: int) -> dict[str, str] | None:
         cache = redis_db.hgetall(f'menu{menu_id}submenu{submenu_id}dish{dish_id}')
@@ -65,9 +72,11 @@ class DishRedis:
 
     def delete(self, menu_id: int, submenu_id: int, dish_id: int) -> None:
         redis_db.delete(f'menu{menu_id}submenu{submenu_id}dish{dish_id}')
+        return None
 
     def delete_children(self, menu_id: int, submenu_id: int, dish_id: int) -> None:
         for key in redis_db.scan_iter(f'menu{menu_id}submenu{submenu_id}dish{dish_id}*'):
             redis_db.delete(key)
         redis_db.delete(f'menu{menu_id}')
         redis_db.delete(f'menu{menu_id}submenu{submenu_id}')
+        return None

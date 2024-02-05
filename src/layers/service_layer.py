@@ -6,7 +6,7 @@ from database import get_db
 from models import Dish, Menu, Submenu
 
 from .redis_layer import DishRedis, MenuRedis, SubmenuRedis
-from .repository import DishRepository, MenuRepository, SubmenuRepository
+from .repository_layer import DishRepository, MenuRepository, SubmenuRepository
 
 
 class MenuService:
@@ -41,6 +41,7 @@ class MenuService:
     def delete(self, menu_id: int, db: Session = Depends(get_db)) -> None:
         self.redis.delete_children(menu_id)
         self.repository.delete(menu_id, db)
+        return
 
 
 class SubmenuService:
@@ -76,6 +77,7 @@ class SubmenuService:
     def delete(self, menu_id: int, submenu_id: int, db: Session = Depends(get_db)) -> None:
         self.redis.delete_children(menu_id, submenu_id)
         self.repository.delete(menu_id, submenu_id, db)
+        return
 
 
 class DishService:
@@ -110,3 +112,4 @@ class DishService:
     def delete(self, menu_id: int, submenu_id: int, dish_id: int, db: Session = Depends(get_db)) -> None:
         self.redis.delete_children(menu_id, submenu_id, dish_id)
         self.repository.delete(menu_id, submenu_id, dish_id, db)
+        return

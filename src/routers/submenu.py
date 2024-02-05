@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 import schemas
 from database import get_db
-from layers.service import SubmenuService
+from layers.service_layer import SubmenuService
 
 router = APIRouter(
     prefix='/api/v1/menus',
