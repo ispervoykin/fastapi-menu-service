@@ -33,7 +33,7 @@ tags_metadata = [
 
 app = FastAPI(lifespan=lifespan,
               title='Menu service',
-              summary='Бэкэнд ресторана',
+              summary='Бэкэнд моего ресторана (открытие скоро)',
               version='0.0.1',)
 
 origins = [
