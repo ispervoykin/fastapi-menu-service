@@ -1,6 +1,6 @@
 from conftest import client
 
-from src.urls import reverse
+from src.utils import reverse
 
 menu_id = 1
 submenu_id = 1
@@ -13,7 +13,7 @@ def test_create_menu() -> None:
         'title': 'My menu 1',
         'description': 'My menu description 1'
     }
-    response = client.post(reverse('menus'), json=post_json)
+    response = client.post(reverse('create_menu'), json=post_json)
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 201
@@ -27,7 +27,7 @@ def test_create_submenu() -> None:
         'title': 'My submenu 1',
         'description': 'My submenu description 1'
     }
-    response = client.post(reverse('submenus', kwargs={'menu_id': menu_id}), json=post_json)
+    response = client.post(reverse('create_submenu', kwargs={'menu_id': menu_id}), json=post_json)
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 201
@@ -36,7 +36,7 @@ def test_create_submenu() -> None:
 
 
 def test_get_dishes_empty() -> None:
-    response = client.get(reverse('dishes', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id}))
+    response = client.get(reverse('get_dishes', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id}))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
     assert response.json() == []
@@ -49,7 +49,8 @@ def test_create_dish() -> None:
         'description': 'My dish description 1',
         'price': '12.50'
     }
-    response = client.post(reverse('dishes', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id}), json=post_json)
+    response = client.post(reverse('create_dish', kwargs={
+                           'menu_id': menu_id, 'submenu_id': submenu_id}), json=post_json)
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 201
@@ -60,7 +61,7 @@ def test_create_dish() -> None:
 
 
 def test_get_dishes_not_empty() -> None:
-    response = client.get(reverse('dishes', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id}))
+    response = client.get(reverse('get_dishes', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id}))
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
@@ -68,7 +69,8 @@ def test_get_dishes_not_empty() -> None:
 
 
 def test_get_dish_success() -> None:
-    response = client.get(reverse('dish', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id, 'dish_id': dish_id}))
+    response = client.get(reverse('get_dish', kwargs={'menu_id': menu_id,
+                          'submenu_id': submenu_id, 'dish_id': dish_id}))
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
@@ -85,7 +87,7 @@ def test_patch_dish() -> None:
         'price': '14.50'
     }
     response = client.patch(
-        reverse('dish', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id, 'dish_id': dish_id}), json=patch_json)
+        reverse('patch_dish', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id, 'dish_id': dish_id}), json=patch_json)
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
@@ -95,7 +97,8 @@ def test_patch_dish() -> None:
 
 
 def test_get_dish_patched() -> None:
-    response = client.get(reverse('dish', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id, 'dish_id': dish_id}))
+    response = client.get(reverse('get_dish', kwargs={'menu_id': menu_id,
+                          'submenu_id': submenu_id, 'dish_id': dish_id}))
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
@@ -106,20 +109,22 @@ def test_get_dish_patched() -> None:
 
 
 def test_delete_dish() -> None:
-    response = client.delete(reverse('dish', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id, 'dish_id': dish_id}))
+    response = client.delete(reverse('delete_dish', kwargs={
+                             'menu_id': menu_id, 'submenu_id': submenu_id, 'dish_id': dish_id}))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.json() is None
 
 
 def test_get_dishes_empty2() -> None:
-    response = client.get(reverse('dishes', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id}))
+    response = client.get(reverse('get_dishes', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id}))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
     assert response.json() == []
 
 
 def test_get_dish_not_found() -> None:
-    response = client.get(reverse('dish', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id, 'dish_id': dish_id}))
+    response = client.get(reverse('get_dish', kwargs={'menu_id': menu_id,
+                          'submenu_id': submenu_id, 'dish_id': dish_id}))
     response_json = {
         'detail': 'dish not found'
     }
@@ -129,26 +134,26 @@ def test_get_dish_not_found() -> None:
 
 
 def test_delete_submenu() -> None:
-    response = client.delete(reverse('submenu', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id}))
+    response = client.delete(reverse('delete_submenu', kwargs={'menu_id': menu_id, 'submenu_id': submenu_id}))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.json() is None
 
 
 def test_get_submenus_empty() -> None:
-    response = client.get(reverse('submenus', kwargs={'menu_id': menu_id}))
+    response = client.get(reverse('get_submenus', kwargs={'menu_id': menu_id}))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
     assert response.json() == []
 
 
 def test_delete_menu() -> None:
-    response = client.delete(reverse('menu', kwargs={'menu_id': menu_id}))
+    response = client.delete(reverse('delete_menu', kwargs={'menu_id': menu_id}))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.json() is None
 
 
 def test_get_menus_empty() -> None:
-    response = client.get(reverse('menus'))
+    response = client.get(reverse('get_menus'))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
     assert response.json() == []

@@ -1,12 +1,12 @@
 from conftest import client
 
-from src.urls import reverse
+from src.utils import reverse
 
 menu_id = 1
 
 
 def test_get_menus_empty() -> None:
-    response = client.get(reverse('menus'))
+    response = client.get(reverse('get_menus'))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
     assert response.json() == []
@@ -18,7 +18,7 @@ def test_create_menu() -> None:
         'title': 'My menu 1',
         'description': 'My menu description 1'
     }
-    response = client.post(reverse('menus'), json=post_json)
+    response = client.post(reverse('create_menu'), json=post_json)
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 201
@@ -27,14 +27,14 @@ def test_create_menu() -> None:
 
 
 def test_get_menus_not_empty() -> None:
-    response = client.get(reverse('menus'))
+    response = client.get(reverse('get_menus'))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
     assert response.json() != []
 
 
 def test_get_menu_success() -> None:
-    response = client.get(reverse('menu', kwargs={'menu_id': menu_id}))
+    response = client.get(reverse('get_menu', kwargs={'menu_id': menu_id}))
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
@@ -48,7 +48,7 @@ def test_patch_menu() -> None:
         'title': 'My updated menu 1',
         'description': 'My updated menu description 1'
     }
-    response = client.patch(reverse('menu', kwargs={'menu_id': menu_id}), json=patch_json)
+    response = client.patch(reverse('patch_menu', kwargs={'menu_id': menu_id}), json=patch_json)
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
@@ -57,7 +57,7 @@ def test_patch_menu() -> None:
 
 
 def test_get_menu_patched() -> None:
-    response = client.get(reverse('menu', kwargs={'menu_id': menu_id}))
+    response = client.get(reverse('get_menu', kwargs={'menu_id': menu_id}))
     response_json = response.json()
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
@@ -67,20 +67,20 @@ def test_get_menu_patched() -> None:
 
 
 def test_delete_menu() -> None:
-    response = client.delete(reverse('menu', kwargs={'menu_id': menu_id}))
+    response = client.delete(reverse('delete_menu', kwargs={'menu_id': menu_id}))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.json() is None
 
 
 def test_get_menus_empty2() -> None:
-    response = client.get(reverse('menus'))
+    response = client.get(reverse('get_menus'))
     assert response.headers.get('Content-Type') == 'application/json'
     assert response.status_code == 200
     assert response.json() == []
 
 
 def test_get_menu_not_found() -> None:
-    response = client.get(reverse('menu', kwargs={'menu_id': menu_id}))
+    response = client.get(reverse('get_menu', kwargs={'menu_id': menu_id}))
     response_json = {
         'detail': 'menu not found'
     }
