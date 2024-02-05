@@ -7,7 +7,7 @@ from schemas import DishCreate, MenuCreate, SubmenuCreate
 
 
 def get_object(model: Menu | Submenu | Dish, id: int, db: Session) -> Menu | Submenu | Dish:
-    """Получает объект указанной модели из дб. Если его нет - кидает исключение."""
+    """Получает объект указанной модели из бд. Если его нет - кидает исключение."""
     db_object = db.query(model).filter(model.id == id).first()
     if not db_object:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=f'{str(model())} not found')
@@ -15,7 +15,7 @@ def get_object(model: Menu | Submenu | Dish, id: int, db: Session) -> Menu | Sub
 
 
 def check_if_object_exists(model: Menu | Submenu | Dish, id: int, db: Session) -> None:
-    """Проверяет наличие объекта указанной модели в дб. Если его нет - кидает исключение."""
+    """Проверяет наличие объекта указанной модели в бд. Если его нет - кидает исключение."""
     db_object = db.query(model).filter(model.id == id).first()
     if not db_object:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=f'{str(model())} not found')
@@ -32,7 +32,7 @@ def add_to_db(object: Menu | Submenu | Dish, db: Session) -> Menu | Submenu | Di
 
 
 def add_children_to_menu(menu: Menu, db: Session) -> Menu:
-    """Добавляет в меню количество связанных подменю и блюд"""
+    """Добавляет в меню количество связанных подменю и блюд."""
     query = db.query(
         func.count(distinct(Submenu.id)).label('submenus_count'),
         func.count(Dish.id).label('dishes_count')
@@ -49,7 +49,7 @@ def add_children_to_menu(menu: Menu, db: Session) -> Menu:
 
 
 def add_children_to_submenu(submenu: Submenu, db: Session) -> Submenu:
-    """Добавляет в подменю количество связанных блюд"""
+    """Добавляет в подменю количество связанных блюд."""
     query = db.query(func.count(Dish.id)).filter(Dish.submenu_id == submenu.id).scalar()
 
     submenu.dishes_count = query
@@ -59,7 +59,7 @@ def add_children_to_submenu(submenu: Submenu, db: Session) -> Submenu:
 
 
 def update_object(object: Menu | Submenu | Dish, model: MenuCreate | SubmenuCreate | DishCreate, db: Session):
-    """Обновляет объект"""
+    """Обновляет объект указанной модели."""
     model_dump = model.model_dump()
     for key in model_dump.keys():
         setattr(object, key, model_dump[key])
@@ -70,7 +70,7 @@ def update_object(object: Menu | Submenu | Dish, model: MenuCreate | SubmenuCrea
 
 
 def delete_object(model: Menu | Submenu | Dish, id: int, db: Session) -> None:
-    """Удаляет объект из бд"""
+    """Удаляет объект указанной модели из бд."""
     object_query = db.query(model).filter(model.id == id)
     if not object_query.first():
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=f'{str(model())} not found')
