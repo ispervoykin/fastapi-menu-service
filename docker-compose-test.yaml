@@ -35,11 +35,11 @@ services:
         env_file:
             - .env-test
         container_name: redis_app_test
-        command: --port 5371
+        command: --port 6380
         networks:
             - ylab-test-network
         expose:
-            - 5371
+            - 6380
 
 networks:
     ylab-test-network:
