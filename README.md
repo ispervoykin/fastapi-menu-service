@@ -23,4 +23,4 @@ $ pytest
 
 Вывод количества подменю и блюд для Меню через один (сложный) ORM запрос находится в src/routers/menu.py на строках 21 и 49.
 
-Реализация аналога функции Django reverse() для FastAPI находится в src/urls.py.
+Реализация аналога функции Django reverse() для FastAPI находится в src/utils.py.
