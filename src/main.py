@@ -16,7 +16,25 @@ async def lifespan(app: FastAPI):
     Base.metadata.drop_all(bind=engine)
     redis_db.flushdb(asynchronous=True)
 
-app = FastAPI(lifespan=lifespan)
+tags_metadata = [
+    {
+        'name': 'Меню',
+        'description': 'Операции с меню.',
+    },
+    {
+        'name': 'Подменю',
+        'description': 'Операции с подменю.',
+    },
+    {
+        'name': 'Блюдо',
+        'description': 'Операции с блюдами.',
+    },
+]
+
+app = FastAPI(lifespan=lifespan,
+              title='Menu service',
+              summary='Бэкэнд ресторана',
+              version='0.0.1',)
 
 origins = [
     'http://localhost:3000',

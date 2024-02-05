@@ -10,8 +10,12 @@ from layers.service import DishService
 router = APIRouter(
     prefix='/api/v1/menus',
     # API grouping in built-in Swagger UI
-    tags=['dishes']
+    tags=['Блюдо']
 )
+
+responses = {
+    404: {'description': 'Блюдо не найдено'},
+}
 
 
 @router.get('/{menu_id}/submenus/{submenu_id}/dishes', response_model=list[schemas.Dish])
@@ -26,19 +30,19 @@ def create_dish(menu_id: int, submenu_id: int, dish: schemas.DishCreate, db: Ses
     return serv.create(menu_id, submenu_id, dish, db)
 
 
-@router.get('/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}', response_model=Union[schemas.Dish, list[schemas.Dish]])
+@router.get('/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}', response_model=Union[schemas.Dish, list[schemas.Dish]], responses={**responses})
 def get_dish(menu_id: int, submenu_id: int, dish_id: int, db: Session = Depends(get_db)) -> schemas.Dish | list[schemas.Dish]:
     serv = DishService()
     return serv.get_by_id(menu_id, submenu_id, dish_id, db)
 
 
-@router.patch('/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}', response_model=schemas.Dish)
+@router.patch('/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}', response_model=schemas.Dish, responses={**responses})
 def patch_dish(menu_id: int, submenu_id: int, dish_id: int, dish: schemas.DishCreate, db: Session = Depends(get_db)) -> schemas.Dish:
     serv = DishService()
     return serv.update(menu_id, submenu_id, dish_id, dish, db)
 
 
-@router.delete('/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}')
+@router.delete('/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}', responses={**responses})
 def delete_dish(menu_id: int, submenu_id: int, dish_id: int, db: Session = Depends(get_db)) -> None:
     serv = DishService()
     serv.delete(menu_id, submenu_id, dish_id, db)
