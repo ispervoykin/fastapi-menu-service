@@ -30,6 +30,9 @@ class Menu(UtilsClass):
 
     submenus = relationship('Submenu', backref='menu')
 
+    def __str__(self):
+        return 'menu'
+
 
 class Submenu(UtilsClass):
     __tablename__ = 'submenu'
@@ -42,6 +45,9 @@ class Submenu(UtilsClass):
 
     dishes = relationship('Dish', backref='submenu')
 
+    def __str__(self):
+        return 'submenu'
+
 
 class Dish(UtilsClass):
     __tablename__ = 'dish'
@@ -51,3 +57,6 @@ class Dish(UtilsClass):
     description = Column(String, nullable=False)
     price = Column(Numeric(precision=12, scale=2), nullable=False)
     submenu_id = Column(Integer, ForeignKey('submenu.id', ondelete='CASCADE'), nullable=False)
+
+    def __str__(self):
+        return 'dish'

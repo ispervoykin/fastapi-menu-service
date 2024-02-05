@@ -18,8 +18,8 @@ def get_menus(db: Session = Depends(get_db)) -> list[schemas.MenuCount]:
     return serv.get_all(db)
 
 
-@router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.Menu)
-def create_menu(menu: schemas.MenuCreate, db: Session = Depends(get_db)) -> schemas.Menu:
+@router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.MenuCount)
+def create_menu(menu: schemas.MenuCreate, db: Session = Depends(get_db)) -> schemas.MenuCount:
     serv = MenuService()
     return serv.create(menu, db)
 
@@ -30,8 +30,8 @@ def get_menu(menu_id: int, db: Session = Depends(get_db)) -> schemas.MenuCount:
     return serv.get_by_id(menu_id, db)
 
 
-@router.patch('/{menu_id}', response_model=schemas.Menu)
-def patch_menu(menu_id: int, menu: schemas.MenuCreate, db: Session = Depends(get_db)) -> schemas.Menu:
+@router.patch('/{menu_id}', response_model=schemas.MenuCount)
+def patch_menu(menu_id: int, menu: schemas.MenuCreate, db: Session = Depends(get_db)) -> schemas.MenuCount:
     serv = MenuService()
     return serv.update(menu_id, menu, db)
 

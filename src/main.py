@@ -1,10 +1,13 @@
-from fastapi import FastAPI
-from database import engine
-from models import Base
-from fastapi.middleware.cors import CORSMiddleware
-from routers import menu, submenu, dish
 from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from database import engine
 from init_redis import redis_db
+from models import Base
+from routers import dish, menu, submenu
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -16,15 +19,15 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 origins = [
-    "http://localhost:3000",
+    'http://localhost:3000',
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=['*'],
+    allow_headers=['*'],
 )
 
 app.include_router(menu.router)

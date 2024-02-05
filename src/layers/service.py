@@ -54,6 +54,7 @@ class SubmenuService:
         return db_submenu
 
     def get_all(self, menu_id: int, db: Session = Depends(get_db)) -> list[Submenu]:
+        print(self.repository.get_all(menu_id, db))
         return self.repository.get_all(menu_id, db)
 
     def get_by_id(self, menu_id: int, submenu_id: int, db: Session = Depends(get_db)) -> dict[str, str]:

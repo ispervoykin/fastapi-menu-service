@@ -14,26 +14,26 @@ router = APIRouter(
 )
 
 
-@router.get('/{menu_id}/submenus', response_model=list[schemas.Submenu])
-def get_submenus(menu_id: int, db: Session = Depends(get_db)) -> list[schemas.Submenu]:
+@router.get('/{menu_id}/submenus', response_model=list[schemas.SubmenuCount])
+def get_submenus(menu_id: int, db: Session = Depends(get_db)) -> list[schemas.SubmenuCount]:
     serv = SubmenuService()
     return serv.get_all(menu_id, db)
 
 
-@router.post('/{menu_id}/submenus', status_code=status.HTTP_201_CREATED, response_model=schemas.Submenu)
-def create_submenu(menu_id: int, submenu: schemas.SubmenuCreate, db: Session = Depends(get_db)) -> schemas.Submenu:
+@router.post('/{menu_id}/submenus', status_code=status.HTTP_201_CREATED, response_model=schemas.SubmenuCount)
+def create_submenu(menu_id: int, submenu: schemas.SubmenuCreate, db: Session = Depends(get_db)) -> schemas.SubmenuCount:
     serv = SubmenuService()
     return serv.create(menu_id, submenu, db)
 
 
-@router.get('/{menu_id}/submenus/{submenu_id}', response_model=Union[schemas.SubmenuCount, list[schemas.Submenu]])
-def get_submenu(menu_id: int, submenu_id: int, db: Session = Depends(get_db)) -> list[schemas.Submenu]:
+@router.get('/{menu_id}/submenus/{submenu_id}', response_model=Union[schemas.SubmenuCount, list[schemas.SubmenuCount]])
+def get_submenu(menu_id: int, submenu_id: int, db: Session = Depends(get_db)) -> list[schemas.SubmenuCount]:
     serv = SubmenuService()
     return serv.get_by_id(menu_id, submenu_id, db)
 
 
-@router.patch('/{menu_id}/submenus/{submenu_id}', response_model=schemas.Submenu)
-def patch_submenu(menu_id: int, submenu_id: int, submenu: schemas.SubmenuCreate, db: Session = Depends(get_db)) -> schemas.Submenu:
+@router.patch('/{menu_id}/submenus/{submenu_id}', response_model=schemas.SubmenuCount)
+def patch_submenu(menu_id: int, submenu_id: int, submenu: schemas.SubmenuCreate, db: Session = Depends(get_db)) -> schemas.SubmenuCount:
     serv = SubmenuService()
     return serv.update(menu_id, submenu_id, submenu, db)
 
